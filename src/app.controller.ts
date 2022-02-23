@@ -6,6 +6,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { HealthCheck, HealthCheckService } from '@nestjs/terminus';
 import { Response } from 'express';
 import { AppService } from './app.service';
 import {
@@ -15,7 +16,16 @@ import {
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly health: HealthCheckService,
+  ) {}
+
+  @Get('/')
+  @HealthCheck()
+  check() {
+    return this.health.check([]);
+  }
 
   @Get('snapshot/url')
   @UsePipes(new ValidationPipe({ transform: true }))
