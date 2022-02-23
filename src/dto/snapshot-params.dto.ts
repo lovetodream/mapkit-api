@@ -4,6 +4,7 @@ import {
   IsBoolean,
   IsEnum,
   IsInt,
+  IsLocale,
   IsOptional,
   IsString,
   Length,
@@ -15,7 +16,7 @@ import {
 /**
  * ref: https://developer.apple.com/documentation/snapshots/create_a_maps_web_snapshot
  */
-export class snapshotParamsDto {
+export class SnapshotParamsDto {
   /**
    * The center is either one of the following:
    * - latitude and longitude seperated by a comma
@@ -109,7 +110,7 @@ export class snapshotParamsDto {
    * The language of the labels displayed on the map.
    * Supported values are locale IDs, such as en-GB or es-MX.
    */
-  @IsString()
+  @IsLocale()
   @IsOptional()
   language = 'en-US';
 
@@ -117,6 +118,8 @@ export class snapshotParamsDto {
   @Type(() => Annotation)
   annotations?: Annotation[];
 
+  @ValidateNested({ each: true })
+  @Type(() => Overlay)
   overlays?: [Overlay];
 
   /**
@@ -137,7 +140,19 @@ export class snapshotParamsDto {
   @IsOptional()
   expires?: number;
 
+  @ValidateNested({ each: true })
+  @Type(() => Image)
   images?: [Image];
+}
+
+export class DataSnapshotParamsDto extends SnapshotParamsDto {
+  /**
+   * Add the base64 prefix to the image data.
+   * The default is true.
+   */
+  @IsOptional()
+  @IsBoolean()
+  withPrefix = true;
 }
 
 /**
@@ -152,7 +167,7 @@ export class Annotation {
    */
   @IsOptional()
   @IsString()
-  color: string;
+  color?: string;
 
   /**
    * A single alphanumeric character {a-z, A-Z, 0-9} that
@@ -163,7 +178,7 @@ export class Annotation {
   @IsOptional()
   @IsString()
   @Length(1, 1)
-  glyphText: string;
+  glyphText?: string;
 
   /**
    * The style of the annotation. Supported values are:
@@ -185,7 +200,7 @@ export class Annotation {
    */
   @IsOptional()
   @IsString()
-  point: string;
+  point?: string;
 
   /**
    * The zero-based index of the image to use for the annotation.
@@ -194,7 +209,7 @@ export class Annotation {
    */
   @IsOptional()
   @IsInt()
-  imgIdx: number;
+  imgIdx?: number;
 
   /**
    * The optional offset in scale independent pixels of the image from the bottom center.
@@ -203,7 +218,7 @@ export class Annotation {
    */
   @IsOptional()
   @IsString()
-  offset: string;
+  offset?: string;
 }
 
 /**
@@ -223,14 +238,14 @@ export class Overlay {
    */
   @IsOptional()
   @IsString()
-  strokeColor: string;
+  strokeColor?: string;
 
   /**
    * The width if the line, in CSS pixels.
    */
   @IsOptional()
   @IsInt()
-  lineWidth: number;
+  lineWidth?: number;
 
   /**
    * An array that defines a line's dash pattern,
@@ -241,7 +256,7 @@ export class Overlay {
   @IsOptional()
   @IsArray()
   @Type(() => Number)
-  lineDash: number[];
+  lineDash?: number[];
 }
 
 /**
