@@ -1,5 +1,6 @@
 {
   "conventionalCommits.scopes": [
-    "unit"
+    "unit",
+    "e2e"
   ]
 }
