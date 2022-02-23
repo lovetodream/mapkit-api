@@ -1,5 +1,6 @@
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
+import { TerminusModule } from '@nestjs/terminus';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -13,12 +14,18 @@ describe('AppController', () => {
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      imports: [HttpModule, ConfigModule.forRoot()],
+      imports: [HttpModule, ConfigModule.forRoot(), TerminusModule],
       controllers: [AppController],
       providers: [AppService],
     }).compile();
 
     appController = app.get<AppController>(AppController);
+  });
+
+  describe('root', () => {
+    it('health', async () => {
+      expect((await appController.check()).status).toBe('ok');
+    });
   });
 
   describe('snapshot', () => {
