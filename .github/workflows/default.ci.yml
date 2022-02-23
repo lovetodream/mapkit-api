@@ -29,7 +29,7 @@ jobs:
         KEY: ${{ secrets.KEY }}
         KEY_ID: ${{ secrets.KEY_ID }}
         TEAM_ID: ${{ secrets.TEAM_ID }}
-    - run: npm test:e2e
+    - run: npm run test:e2e
       env:
         KEY: ${{ secrets.KEY }}
         KEY_ID: ${{ secrets.KEY_ID }}
