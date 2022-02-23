@@ -38,8 +38,6 @@ export class AppService {
   async getSnapshotPng(dto: SnapshotParamsDto, response: Response) {
     const url = this.getSnapshotUrl(dto);
     const data = await this.performMapkitCall(url);
-    console.log(data);
-    console.log(response.headersSent);
     response.setHeader('Content-Type', 'image/png');
     response.type('png');
     response.send(data);
@@ -98,7 +96,6 @@ export class AppService {
         )
       ).data;
     } catch (error) {
-      console.log(new TextDecoder().decode(error.response.data));
       throw new BadRequestException(
         JSON.parse(new TextDecoder().decode(error.response.data)),
       );
