@@ -241,7 +241,7 @@ export class Overlay {
   strokeColor?: string;
 
   /**
-   * The width if the line, in CSS pixels.
+   * The width of the line, in CSS pixels.
    */
   @IsOptional()
   @IsInt()
