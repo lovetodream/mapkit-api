@@ -1,5 +1,10 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  OnApplicationShutdown,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { firstValueFrom } from 'rxjs';
 import {
@@ -9,7 +14,9 @@ import {
 import { encode } from './helper/base64-arraybuffer.conversion';
 
 @Injectable()
-export class AppService {
+export class AppService implements OnApplicationShutdown {
+  private readonly logger = new Logger(AppService.name);
+
   teamId: string;
   keyId: string;
   key: string;
@@ -18,6 +25,10 @@ export class AppService {
     this.teamId = process.env.TEAM_ID;
     this.keyId = process.env.KEY_ID;
     this.key = process.env.KEY;
+  }
+
+  onApplicationShutdown(signal: string) {
+    this.logger.log(`Shutting down due to signal ${signal}...`);
   }
 
   getSnapshotUrl(dto: SnapshotParamsDto): string {
